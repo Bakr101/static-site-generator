@@ -1,3 +1,5 @@
+from textnode import TextNode, TextType
+
 class HTMLNode:
     def __init__(self, tag: str = None, value: str = None, children: list['HTMLNode'] = None, props: dict[str, str] = None):
         self.tag = tag
@@ -50,5 +52,18 @@ class ParentNode(HTMLNode):
         return f"<{self.tag}{self.props_to_html()}>{''.join([child.to_html() for child in self.children])}</{self.tag}>"
     
     
-
-    
+def text_node_to_html_node(text_node: TextNode) -> HTMLNode:
+    if text_node.text_type == TextType.NORMAL:
+        return LeafNode(None, text_node.text)
+    elif text_node.text_type == TextType.BOLD:
+        return LeafNode("b", text_node.text)
+    elif text_node.text_type == TextType.ITALIC:
+        return LeafNode("i", text_node.text)
+    elif text_node.text_type == TextType.CODE:
+        return LeafNode("code", text_node.text)
+    elif text_node.text_type == TextType.LINK:
+        return LeafNode("a", text_node.text, {"href": text_node.url})
+    elif text_node.text_type == TextType.IMAGE:
+        return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
+    else:
+        raise ValueError(f"Invalid text type: {text_node.text_type}")

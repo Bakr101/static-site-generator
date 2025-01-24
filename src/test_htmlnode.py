@@ -1,6 +1,7 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode, ParentNode
+from htmlnode import HTMLNode, LeafNode, ParentNode, text_node_to_html_node
+from textnode import TextNode, TextType
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -78,5 +79,35 @@ class TestHTMLNode(unittest.TestCase):
             node.to_html(),
             "<h2><b>Bold text</b>Normal text<i>italic text</i>Normal text</h2>",
         )
+    
+    def test_text_node_to_html_node(self):
+        node = text_node_to_html_node(TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev"))
+        self.assertEqual(node.to_html(), "<b>This is a text node</b>")
+    
+    def test_text_node_to_html_node_normal(self):
+        node = text_node_to_html_node(TextNode("This is a text node", TextType.NORMAL))
+        self.assertEqual(node.to_html(), "This is a text node")
+    
+    def test_text_node_to_html_node_italic(self):
+        node = text_node_to_html_node(TextNode("This is a text node", TextType.ITALIC))
+        self.assertEqual(node.to_html(), "<i>This is a text node</i>")
+    
+    def test_text_node_to_html_node_code(self):
+        node = text_node_to_html_node(TextNode("This is a text node", TextType.CODE))
+        self.assertEqual(node.to_html(), "<code>This is a text node</code>")
+    
+    def test_text_node_to_html_node_link(self):
+        node = text_node_to_html_node(TextNode("This is a text node", TextType.LINK, "https://www.boot.dev"))
+        self.assertEqual(node.to_html(), "<a href=\"https://www.boot.dev\">This is a text node</a>")
+    
+    def test_text_node_to_html_node_image(self):
+        node = text_node_to_html_node(TextNode("This is a text node", TextType.IMAGE, "https://www.boot.dev"))
+        self.assertEqual(node.to_html(), "<img src=\"https://www.boot.dev\" alt=\"This is a text node\"></img>")
+    
+    def test_text_node_to_html_fail(self):
+        with self.assertRaises(ValueError):
+            text_node_to_html_node(TextNode("This is a text node", "TextType.LINK", "https://www.boot.dev")) # Invalid because it is a string
+    
+
 if __name__ == "__main__":
     unittest.main()
