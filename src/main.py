@@ -1,5 +1,5 @@
 from textnode import TextNode, TextType
-from delimiter import split_nodes_by_delimiter
+from text_conversion import split_nodes_by_delimiter
 def main():
     # bold = TextType.BOLD_TEXT
     # text_node = TextNode("This is a text node", bold, "https://www.boot.dev")

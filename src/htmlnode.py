@@ -52,7 +52,7 @@ class ParentNode(HTMLNode):
         return f"<{self.tag}{self.props_to_html()}>{''.join([child.to_html() for child in self.children])}</{self.tag}>"
     
     
-def text_node_to_html_node(text_node: TextNode) -> HTMLNode:
+def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     if text_node.text_type == TextType.NORMAL:
         return LeafNode(None, text_node.text)
     elif text_node.text_type == TextType.BOLD:
