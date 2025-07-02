@@ -1,5 +1,6 @@
 from enum import Enum
-from htmlnode import LeafNode, ParentNode, HTMLNode, text_node_to_html_node
+from htmlnode import LeafNode, ParentNode, HTMLNode
+from textnode import text_node_to_html_node
 from text_conversion import text_to_textnodes
 
 def markdown_to_blocks(markdown: str) -> list[str]:

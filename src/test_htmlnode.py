@@ -1,7 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode, ParentNode, text_node_to_html_node
-from textnode import TextNode, TextType
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -12,6 +11,14 @@ class TestHTMLNode(unittest.TestCase):
     def test_props_to_html(self):
         node = HTMLNode("div", "This is a div", [], {"class": "container"})
         self.assertEqual(node.props_to_html(), " class=\"container\"")
+    
+    def test_values(self):
+        node = HTMLNode("div", "I wish I could read")
+        self.assertEqual(node.tag, "div")
+        self.assertEqual(node.value, "I wish I could read")
+        self.assertEqual(node.children, None)
+        self.assertEqual(node.props, None)
+    
     
     def test_eq(self):
         node = HTMLNode("div", "This is a div", [], {"class": "container"})
@@ -65,6 +72,14 @@ class TestHTMLNode(unittest.TestCase):
         node = ParentNode("div", [LeafNode("span", "This is a span", {"class": "container", "id": "main", "data-id": "123"}), LeafNode("span", "This is a span", {"class": "container", "id": "main", "data-id": "123"}), LeafNode("span", "This is a span", {"class": "container", "id": "main", "data-id": "123"}), LeafNode("span", "This is a span", {"class": "container", "id": "main", "data-id": "123"}), LeafNode("span", "This is a span", {"class": "container", "id": "main", "data-id": "123"})], {"class": "container", "id": "main", "data-id": "123"})
         self.assertEqual(node.to_html(), "<div class=\"container\" id=\"main\" data-id=\"123\"><span class=\"container\" id=\"main\" data-id=\"123\">This is a span</span><span class=\"container\" id=\"main\" data-id=\"123\">This is a span</span><span class=\"container\" id=\"main\" data-id=\"123\">This is a span</span><span class=\"container\" id=\"main\" data-id=\"123\">This is a span</span><span class=\"container\" id=\"main\" data-id=\"123\">This is a span</span></div>")
 
+    def test_to_html_with_grandchildren(self):
+        grandchild_node = LeafNode("b", "grandchild")
+        child_node = ParentNode("span", [grandchild_node], {"class": "container", "id": "main", "data-id": "123"})
+        parent_node = ParentNode("div", [child_node], {"class": "container", "id": "main", "data-id": "123"})
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div class=\"container\" id=\"main\" data-id=\"123\"><span class=\"container\" id=\"main\" data-id=\"123\"><b>grandchild</b></span></div>",
+        )
     def test_headings(self):
         node = ParentNode(
             "h2",
@@ -80,33 +95,6 @@ class TestHTMLNode(unittest.TestCase):
             "<h2><b>Bold text</b>Normal text<i>italic text</i>Normal text</h2>",
         )
     
-    def test_text_node_to_html_node(self):
-        node = text_node_to_html_node(TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev"))
-        self.assertEqual(node.to_html(), "<b>This is a text node</b>")
-    
-    def test_text_node_to_html_node_normal(self):
-        node = text_node_to_html_node(TextNode("This is a text node", TextType.NORMAL))
-        self.assertEqual(node.to_html(), "This is a text node")
-    
-    def test_text_node_to_html_node_italic(self):
-        node = text_node_to_html_node(TextNode("This is a text node", TextType.ITALIC))
-        self.assertEqual(node.to_html(), "<i>This is a text node</i>")
-    
-    def test_text_node_to_html_node_code(self):
-        node = text_node_to_html_node(TextNode("This is a text node", TextType.CODE))
-        self.assertEqual(node.to_html(), "<code>This is a text node</code>")
-    
-    def test_text_node_to_html_node_link(self):
-        node = text_node_to_html_node(TextNode("This is a text node", TextType.LINK, "https://www.boot.dev"))
-        self.assertEqual(node.to_html(), "<a href=\"https://www.boot.dev\">This is a text node</a>")
-    
-    def test_text_node_to_html_node_image(self):
-        node = text_node_to_html_node(TextNode("This is a text node", TextType.IMAGE, "https://www.boot.dev"))
-        self.assertEqual(node.to_html(), "<img src=\"https://www.boot.dev\" alt=\"This is a text node\"></img>")
-    
-    def test_text_node_to_html_fail(self):
-        with self.assertRaises(ValueError):
-            text_node_to_html_node(TextNode("This is a text node", "TextType.LINK", "https://www.boot.dev")) # Invalid because it is a string
     
 
 if __name__ == "__main__":
