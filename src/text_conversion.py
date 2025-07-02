@@ -22,7 +22,7 @@ def split_nodes_by_delimiter(old_nodes: list[TextNode], delimiter: str, text_typ
 
 
 def extract_markdown_images(text: str) -> list[tuple[str, str]] | None:
-    result = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+    result = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
     if len(result) == 0:
         return None
     return result
@@ -97,7 +97,7 @@ def text_to_textnodes(text: str) -> list[TextNode]:
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
     nodes = split_nodes_by_delimiter(nodes, "**", TextType.BOLD)
-    nodes = split_nodes_by_delimiter(nodes, "*", TextType.ITALIC)
+    nodes = split_nodes_by_delimiter(nodes, "_", TextType.ITALIC)
     nodes = split_nodes_by_delimiter(nodes, "`", TextType.CODE)
     return nodes
 

@@ -121,11 +121,11 @@ class TestDelimiter(unittest.TestCase):
         )
     
     def test_text_to_textnodes(self):
-        text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         self.assertEqual(text_to_textnodes(text), [TextNode("This is ", TextType.NORMAL), TextNode("text", TextType.BOLD), TextNode(" with an ", TextType.NORMAL), TextNode("italic", TextType.ITALIC), TextNode(" word and a ", TextType.NORMAL), TextNode("code block", TextType.CODE), TextNode(" and an ", TextType.NORMAL), TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"), TextNode(" and a ", TextType.NORMAL), TextNode("link", TextType.LINK, "https://boot.dev")])
     
     def test_text_to_textnodes_new_case(self):
-        text = "This is *ahmed* and his friend **ali** this is his code `print('hello')` and this is their image ![ahmed & ali](https://i.imgur.com/fJRm4Vk.jpeg) and this is their website link [ahmed & ali](https://ahmed.com)"
+        text = "This is _ahmed_ and his friend **ali** this is his code `print('hello')` and this is their image ![ahmed & ali](https://i.imgur.com/fJRm4Vk.jpeg) and this is their website link [ahmed & ali](https://ahmed.com)"
         self.assertEqual(text_to_textnodes(text), [TextNode("This is ", TextType.NORMAL), TextNode("ahmed", TextType.ITALIC), TextNode(" and his friend ", TextType.NORMAL), TextNode("ali", TextType.BOLD), TextNode(" this is his code ", TextType.NORMAL), TextNode("print('hello')", TextType.CODE), TextNode(" and this is their image ", TextType.NORMAL), TextNode("ahmed & ali", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"), TextNode(" and this is their website link ", TextType.NORMAL), TextNode("ahmed & ali", TextType.LINK, "https://ahmed.com")])
 
 if __name__ == "__main__":
