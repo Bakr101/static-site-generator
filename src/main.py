@@ -1,13 +1,15 @@
-from textnode import TextNode, TextType
-from text_conversion import split_nodes_by_delimiter
+from generate_page import generate_page
+from copy_static import copy_static
+import os
+import shutil
+
 def main():
-    # bold = TextType.BOLD_TEXT
-    # text_node = TextNode("This is a text node", bold, "https://www.boot.dev")
-    # print(text_node)
-    node = TextNode(
-            "This is text with a **bolded** word and **another**", TextType.NORMAL
-        )
-    new_nodes = split_nodes_by_delimiter([node], "**", TextType.BOLD)
-    print(new_nodes)
+    if os.path.exists("./public"):
+        shutil.rmtree("./public")
+    copy_static("./static", "./public")
+    print("Public folder created")
+
+    generate_page("content/index.md", "public/index.html", "template.html")
+            
 
 main()
