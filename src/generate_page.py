@@ -24,8 +24,8 @@ def generate_page(from_path: str, dst_path: str, template_path: str, base_path: 
     dst_dir = os.path.dirname(dst_path)
     if not os.path.exists(dst_dir) or not os.path.isdir(dst_dir):
         os.makedirs(dst_dir)
-    template = template.replace("{{ Title }}", title)
-    template = template.replace("{{ Content }}", content)
+    template = template.replace("{{ title }}", title)
+    template = template.replace("{{ content }}", content)
     template = template.replace('href="/', 'href="' + base_path)
     template = template.replace('src="/', 'src="' + base_path)
     try:
