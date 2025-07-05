@@ -6,9 +6,8 @@ import sys
 
 def main():
     print("Generating pages...")
-    if len(sys.argv) < 2:
-        base_path = "/"
-    else:
+    base_path = "/"
+    if len(sys.argv) > 1:
         base_path = sys.argv[1]
     
     if os.path.exists("./docs"):
