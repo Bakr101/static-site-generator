@@ -25,6 +25,7 @@ class BlockType(Enum):
     QUOTE = "quote"
     UNORDERED_LIST = "unordered_list"
     ORDERED_LIST = "ordered_list"
+    IMAGE = "image"
 
 def block_to_block_type(block: str) -> BlockType:
     lines = block.split("\n")
@@ -64,6 +65,8 @@ def block_to_block_type(block: str) -> BlockType:
                 return BlockType.PARAGRAPH
             valid_list_lines += 1
         return BlockType.ORDERED_LIST
+    if block.startswith("!["):
+        return BlockType.IMAGE
     return BlockType.PARAGRAPH
 
 def markdown_to_html_node(markdown: str) -> HTMLNode:
@@ -92,6 +95,8 @@ def block_to_html_node(block: str) -> HTMLNode:
         return ul_to_html_node(block)
     elif block_type == BlockType.ORDERED_LIST:
         return ol_to_html_node(block)
+    elif block_type == BlockType.IMAGE:
+        return image_to_html_node(block)
     raise ValueError(f"Invalid block type: {block_type}")
     
 
@@ -160,4 +165,11 @@ def ol_to_html_node(block: str) -> ParentNode:
     return ParentNode("ol", list_items)
 
 
+def image_to_html_node(block: str) -> LeafNode:
+    if not block.startswith("!["):
+        raise ValueError("Invalid image block")
+    image = text_to_textnodes(block)
+    html_node = text_node_to_html_node(image[0])
+    return html_node
+    
 
