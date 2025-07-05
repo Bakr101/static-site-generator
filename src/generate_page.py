@@ -26,7 +26,7 @@ def generate_page(from_path: str, dst_path: str, template_path: str, base_path: 
         os.makedirs(dst_dir)
     try:
         with open(dst_path, "w", encoding="utf-8") as f:
-            f.write(template.replace("{{ title }}", title).replace("{{ content }}", content).replace('href="/"', f'href="{base_path}"').replace('src="/"', f'src="{base_path}"'))
+            f.write(template.replace("{{ title }}", title).replace("{{ content }}", content).replace('href="/', 'href="' + base_path).replace('src="/', 'src="' + base_path))
     except Exception as e:
         print(f"Error writing to {dst_path}: {e}")
         return
