@@ -1,4 +1,4 @@
-from generate_page import generate_page
+from generate_page import generate_pages_recursively
 from copy_static import copy_static
 import os
 import shutil
@@ -9,7 +9,7 @@ def main():
     copy_static("./static", "./public")
     print("Public folder created")
 
-    generate_page("content/index.md", "public/index.html", "template.html")
+    generate_pages_recursively("content", "template.html", "public")
             
 
 main()
